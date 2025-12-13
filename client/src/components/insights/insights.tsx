@@ -17,7 +17,7 @@ export const Insights = ({ insights, className }: InsightsProps) => {
       <div className={styles.list}>
         {insights?.length
           ? (
-            insights.map(({ id, text, date, brandId }) => (
+            insights.map(({ id, text, createdAt, brand: brandId }) => (
               <div className={styles.insight} key={id}>
                 <div className={styles["insight-meta"]}>
                   <span>{brandId}</span>
