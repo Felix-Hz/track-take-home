@@ -14,6 +14,7 @@ export const createTable = `
 // NOTE: When preparing the statement for sqlite respect the order of the params or bad things will happen.
 export const insertStatement =
   `INSERT INTO insights (brand, createdAt, text) VALUES (?, ?, ?)`;
+export const deleteStatement = `DELETE FROM insights WHERE id = ?`;
 
 /**
  * TABLE TYPES FOR APPLICATION USE

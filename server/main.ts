@@ -6,6 +6,7 @@ import { Port } from "../lib/utils/index.ts";
 import listInsights from "./operations/list-insights.ts";
 import lookupInsight from "./operations/lookup-insight.ts";
 import addInsight from "./operations/add-insight.ts";
+import deleteInsight from "./operations/delete-insight.ts";
 import { createTablesSql } from "./tables/index.ts";
 
 console.log("Loading configuration");
@@ -40,8 +41,8 @@ router.get("/insights", (ctx) => {
 });
 
 router.get("/insights/:id", (ctx) => {
-  const params = ctx.params as Record<string, any>;
-  const result = lookupInsight({ db, id: params.id });
+  const params = ctx.params;
+  const result = lookupInsight({ db, id: Number(params.id) });
   ctx.response.body = result;
   ctx.response.status = 200;
 });
@@ -53,8 +54,11 @@ router.post("/insights/create", async (ctx) => {
   ctx.response.status = 201;
 });
 
-router.get("/insights/delete", (ctx) => {
-  // TODO
+router.delete("/insights/:id", (ctx) => {
+  const params = ctx.params;
+  const result = deleteInsight({ db, id: Number(params.id) });
+  ctx.response.body = { deleted: result };
+  ctx.response.status = result > 0 ? 200 : 404; // 404 if no rows affected
 });
 
 const app = new oak.Application();

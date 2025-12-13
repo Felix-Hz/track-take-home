@@ -39,6 +39,13 @@
   }
 }
 
+.insight-delete-modal {
+  display: flex;
+  gap: var(--size-3);
+  justify-content: flex-end;
+  margin-top: var(--size-6);
+}
+
 .insight-content {
   font: var(--text-lg);
   margin: var(--size-4) 0 0;
