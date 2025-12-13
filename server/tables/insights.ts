@@ -1,3 +1,7 @@
+/**
+ * SQL STUFFS
+ */
+
 export const createTable = `
   CREATE TABLE IF NOT EXISTS insights (
     id INTEGER PRIMARY KEY ASC NOT NULL,
@@ -6,6 +10,14 @@ export const createTable = `
     text TEXT NOT NULL
   );
 `;
+
+// NOTE: When preparing the statement for sqlite respect the order of the params or bad things will happen.
+export const insertStatement =
+  `INSERT INTO insights (brand, createdAt, text) VALUES (?, ?, ?)`;
+
+/**
+ * TABLE TYPES FOR APPLICATION USE
+ */
 
 export type Row = {
   id: number;
@@ -19,6 +31,3 @@ export type Insert = {
   createdAt: string;
   text: string;
 };
-
-export const insertStatement = (item: Insert) =>
-  `INSERT INTO insights (brand, createdAt, text) VALUES (${item.brand}, '${item.createdAt}', '${item.text}')`;

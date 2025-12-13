@@ -5,6 +5,7 @@ import * as path from "@std/path";
 import { Port } from "../lib/utils/index.ts";
 import listInsights from "./operations/list-insights.ts";
 import lookupInsight from "./operations/lookup-insight.ts";
+import addInsight from "./operations/add-insight.ts";
 import { createTablesSql } from "./tables/index.ts";
 
 console.log("Loading configuration");
@@ -45,8 +46,11 @@ router.get("/insights/:id", (ctx) => {
   ctx.response.status = 200;
 });
 
-router.get("/insights/create", (ctx) => {
-  // TODO
+router.post("/insights/create", async (ctx) => {
+  const body = await ctx.request.body.json();
+  const result = addInsight({ db, brand: body.brand, text: body.text });
+  ctx.response.body = result;
+  ctx.response.status = 201;
 });
 
 router.get("/insights/delete", (ctx) => {
