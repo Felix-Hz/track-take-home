@@ -12,7 +12,7 @@ export default (input: Input): Insight | undefined => {
   const [row] = input.db
     .sql<
     insightsTable.Row
-  >`SELECT * FROM insights WHERE id = ${input.id} LIMIT 1`;
+  >`SELECT id, brand, createdAt, text FROM insights WHERE id = ${input.id} LIMIT 1`;
 
   if (row) {
     const result = { ...row, createdAt: new Date(row.createdAt) };

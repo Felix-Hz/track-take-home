@@ -1,12 +1,13 @@
 import type { HasDBClient } from "../shared.ts";
-import { type Insert, insertStatement } from "$tables/insights.ts";
+import type { Insight } from "$models/insight.ts";
+import { type Insert, insertStatement, type Row } from "$tables/insights.ts";
 
 type Input = HasDBClient & {
   brand: number;
   text: string;
 };
 
-export default (input: Input): number => {
+export default (input: Input): Insight => {
   const { db, brand, text } = input;
   console.debug("Adding insight", { brand, text });
 
@@ -18,16 +19,22 @@ export default (input: Input): number => {
 
   // Run is an `exec` alias that will return the nr of rows affected.
   // See docs: https://jsr.io/@db/sqlite/doc/~/Database#method_exec_0
-  const changes = db.prepare(insertStatement).run([
+  db.prepare(insertStatement).run([
     insertData.brand,
     insertData.createdAt,
     insertData.text,
   ]);
 
-  if (changes === 0) {
-    throw new Error("Failed to add insight");
+  // Return required props to the caller
+  const [row] = db.sql<
+    Row
+  >`SELECT id, brand, createdAt, text FROM insights WHERE id = ${db.lastInsertRowId}`;
+
+  if (row) {
+    const insight = { ...row, createdAt: new Date(row.createdAt) };
+    console.debug("Insight added successfully", insight);
+    return insight;
   }
 
-  console.debug("Insight added successfully");
-  return changes;
+  throw new Error("Failed to retrieve inserted insight");
 };
