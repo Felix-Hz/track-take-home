@@ -3,13 +3,12 @@
   "workspace": ["./server", "./client", "./lib"],
   "nodeModulesDir": "auto",
   "tasks": {
-    "dev": {
-      "command": "",
-      "dependencies": ["dev:server", "dev:client"]
-    },
+    "dev": { "dependencies": ["dev:server", "dev:client"] },
     "dev:server": "cd server && deno task dev",
     "dev:client": "cd client && deno task dev",
-    "test:client": "cd client && deno task test"
+    "test:client": "cd client && deno task test",
+    "test:server": "cd server && deno test --allow-all",
+    "test": { "dependencies": ["test:client", "test:server"] }
   },
   "compilerOptions": {
     "strict": true,
