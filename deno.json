@@ -8,7 +8,9 @@
     "dev:client": "cd client && deno task dev",
     "test:client": "cd client && deno task test",
     "test:server": "cd server && deno test --allow-all",
-    "test": { "dependencies": ["test:client", "test:server"] }
+    "test": { "dependencies": ["test:client", "test:server"] },
+    "coverage:client": "cd client && deno task test:coverage",
+    "coverage:server": "cd server && deno test --allow-all --coverage=coverage && deno coverage coverage"
   },
   "compilerOptions": {
     "strict": true,
