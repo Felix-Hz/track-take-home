@@ -12,6 +12,7 @@ describe("Modal", () => {
     expect(screen.queryByText("Closed modal")).toBeFalsy();
 
     render(
+      // deno-lint-ignore jsx-boolean-value
       <Modal open={true} onClose={() => undefined}>
         <div>Open modal</div>
       </Modal>,

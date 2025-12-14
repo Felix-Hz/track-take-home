@@ -6,6 +6,7 @@ const noOp = () => undefined;
 
 describe("AddInsight", () => {
   it("renders", () => {
+    // deno-lint-ignore jsx-boolean-value
     render(<AddInsight open={true} onClose={noOp} />);
     expect(screen.getByText("Add a new insight")).toBeTruthy();
     expect(screen.getByText("Brand")).toBeTruthy();

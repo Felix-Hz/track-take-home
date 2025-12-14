@@ -16,6 +16,7 @@ describe("InsightDetailsModal", () => {
   it("renders", () => {
     render(
       <InsightDetailsModal
+        // deno-lint-ignore jsx-boolean-value
         open={true}
         onClose={noOp}
         insight={TEST_INSIGHT}

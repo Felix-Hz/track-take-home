@@ -8,6 +8,7 @@ describe("DeleteInsightModal", () => {
   it("renders", () => {
     render(
       <DeleteInsightModal
+        // deno-lint-ignore jsx-boolean-value
         open={true}
         onClose={noOp}
         onConfirm={noOp}
