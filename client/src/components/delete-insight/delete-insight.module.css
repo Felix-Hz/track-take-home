@@ -1,0 +1,10 @@
+.heading {
+  font: var(--text-2xl);
+}
+
+.insight-delete-modal {
+  display: flex;
+  gap: var(--size-3);
+  justify-content: flex-end;
+  margin-top: var(--size-6);
+}

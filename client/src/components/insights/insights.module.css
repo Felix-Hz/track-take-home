@@ -29,7 +29,7 @@
   gap: var(--size-3);
 }
 
-.insight-delete {
+.insight-delete-icon {
   width: var(--size-5);
   height: var(--size-5);
   cursor: pointer;
@@ -37,13 +37,6 @@
   &:hover {
     stroke: var(--color-red-500);
   }
-}
-
-.insight-delete-modal {
-  display: flex;
-  gap: var(--size-3);
-  justify-content: flex-end;
-  margin-top: var(--size-6);
 }
 
 .insight-content {
