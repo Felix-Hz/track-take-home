@@ -8,7 +8,8 @@ type AddInsightProps = ModalProps;
 /**
  * Handle form submission side-effects when adding insights:
  * -----
- * + Reload the page to get updated insights, closing the modal due to unmounting
+ * + Add the insight
+ * + Reload the page to get updated insights
  */
 const handleAddInsight = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
@@ -23,12 +24,13 @@ const handleAddInsight = async (e: React.FormEvent<HTMLFormElement>) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ brand, text }),
     });
-    if (response.ok) {
-      // Reload to get udpated insights, navigation will reset the modal state due to unmounting
-      globalThis.location.reload();
-
-      // NOTE: Navigation UX feels bad maybe just update insights state in parent component to rerender
+    if (!response.ok) {
+      alert("Failed to add insight");
+      throw new Error("Something went wrong", { cause: response });
     }
+    // Reload to get udpated insights, navigation will reset the modal state due to unmounting
+    globalThis.location.reload();
+    // NOTE: Navigation UX feels bad maybe just update insights state in parent component to rerender
   } catch (e) {
     console.error("Failed to add insight:", e);
   }
