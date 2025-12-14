@@ -1,0 +1,19 @@
+.insight-view-modal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4);
+  min-width: 500px;
+}
+
+.insight-view-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-6);
+  margin-top: var(--size-4);
+}
+
+.insight-view-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-3);
+}

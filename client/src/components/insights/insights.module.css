@@ -15,6 +15,13 @@
   border: 1px solid var(--color-grey-300);
 }
 
+.insight:hover {
+  border-color: var(--color-purple-300);
+  box-shadow: var(--shadow-md);
+  transition: border-color 250ms ease, box-shadow 250ms ease;
+  cursor: pointer;
+}
+
 .insight-meta {
   display: flex;
   align-items: center;

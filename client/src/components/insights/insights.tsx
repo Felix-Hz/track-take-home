@@ -6,6 +6,7 @@ import { formatDateTime } from "../../lib/utils/dates.ts";
 import styles from "./insights.module.css";
 import type { Insight } from "../../schemas/insight.ts";
 import { DeleteInsightModal } from "../delete-insight/delete-insight.tsx";
+import { InsightDetailsModal } from "../insight-details/insight-details.tsx";
 
 type InsightsProps = {
   insights: Insight[];
@@ -36,29 +37,31 @@ const handleDeleteInsight = async (id: number) => {
 };
 
 export const Insights = ({ insights, className }: InsightsProps) => {
+  const [viewingId, setViewingId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
   return (
     <div className={cx(className)}>
       <h1 className={styles.heading}>Insights</h1>
       <div className={styles.list}>
-        <DeleteInsightModal
-          open={deletingId !== null}
-          onClose={() => setDeletingId(null)}
-          onConfirm={() => deletingId && handleDeleteInsight(deletingId)}
-        />
         {insights?.length
           ? (
             insights.map(({ id, text, createdAt, brand: brandId }) => (
-              <div className={styles.insight} key={id}>
+              <div
+                key={id}
+                className={styles.insight}
+                onClick={() => setViewingId(id)}
+              >
                 <div className={styles["insight-meta"]}>
                   <span>{getBrandNameById(brandId)}</span>
                   <div className={styles["insight-meta-details"]}>
                     <span>{formatDateTime(createdAt)}</span>
                     <Trash2Icon
                       className={styles["insight-delete-icon"]}
-                      onClick={() =>
-                        setDeletingId(id)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // prevent triggering the insight view modal
+                        setDeletingId(id);
+                      }}
                     />
                   </div>
                 </div>
@@ -67,6 +70,21 @@ export const Insights = ({ insights, className }: InsightsProps) => {
             ))
           )
           : <p>We have no insight!</p>}
+        {
+          /*
+           * Modals will float above everything else, and they must live outside of any for-loop
+           */
+        }
+        <DeleteInsightModal
+          open={deletingId !== null}
+          onClose={() => setDeletingId(null)}
+          onConfirm={() => deletingId && handleDeleteInsight(deletingId)}
+        />
+        <InsightDetailsModal
+          insight={insights.find((i) => i.id === viewingId) ?? null}
+          open={viewingId !== null}
+          onClose={() => setViewingId(null)}
+        />
       </div>
     </div>
   );
