@@ -1,4 +1,3 @@
-// deno-lint-ignore-file no-explicit-any
 import { Database } from "@db/sqlite";
 import * as oak from "@oak/oak";
 import * as path from "@std/path";
@@ -8,6 +7,10 @@ import lookupInsight from "./operations/lookup-insight.ts";
 import addInsight from "./operations/add-insight.ts";
 import deleteInsight from "./operations/delete-insight.ts";
 import { createTablesSql } from "./tables/index.ts";
+import {
+  CreateInsight,
+  NonNegativeInt as InsightID,
+} from "./models/insight.ts";
 
 console.log("Loading configuration");
 
@@ -41,24 +44,48 @@ router.get("/insights", (ctx) => {
 });
 
 router.get("/insights/:id", (ctx) => {
-  const params = ctx.params;
-  const result = lookupInsight({ db, id: Number(params.id) });
-  ctx.response.body = result;
+  const result = InsightID.safeParse(ctx.params.id);
+  if (!result.success) {
+    ctx.response.body = { error: "Invalid insight ID" };
+    ctx.response.status = 400;
+    return;
+  }
+  const insight = lookupInsight({ db, id: result.data });
+  ctx.response.body = insight;
   ctx.response.status = 200;
 });
 
 router.post("/insights/create", async (ctx) => {
   const body = await ctx.request.body.json();
-  const result = addInsight({ db, brand: body.brand, text: body.text });
-  ctx.response.body = result;
+  const result = CreateInsight.safeParse(body);
+  if (!result.success) {
+    ctx.response.body = { error: "Invalid insight data" };
+    ctx.response.status = 400;
+    return;
+  }
+  const insight = addInsight({
+    db,
+    text: result.data.text,
+    brand: result.data.brand,
+  });
+  ctx.response.body = insight;
   ctx.response.status = 201;
 });
 
 router.delete("/insights/:id", (ctx) => {
-  const params = ctx.params;
-  const result = deleteInsight({ db, id: Number(params.id) });
-  ctx.response.body = { deleted: result };
-  ctx.response.status = result > 0 ? 200 : 404; // 404 if no rows affected
+  const result = InsightID.safeParse(ctx.params.id);
+  if (!result.success) {
+    ctx.response.body = { error: "Invalid insight ID" };
+    ctx.response.status = 400;
+    return;
+  }
+  const rowsAffected = deleteInsight({ db, id: result.data });
+  if (rowsAffected > 0) {
+    ctx.response.body = { message: "Insight deleted successfully" };
+  } else {
+    ctx.response.body = { error: "Insight not found" };
+  }
+  ctx.response.status = rowsAffected > 0 ? 200 : 404;
 });
 
 const app = new oak.Application();
