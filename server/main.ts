@@ -44,7 +44,7 @@ router.get("/insights", (ctx) => {
 });
 
 router.get("/insights/:id", (ctx) => {
-  const result = InsightID.safeParse(ctx.params.id);
+  const result = InsightID.safeParse(Number(ctx.params.id));
   if (!result.success) {
     ctx.response.body = { error: "Invalid insight ID" };
     ctx.response.status = 400;
@@ -73,7 +73,7 @@ router.post("/insights/create", async (ctx) => {
 });
 
 router.delete("/insights/:id", (ctx) => {
-  const result = InsightID.safeParse(ctx.params.id);
+  const result = InsightID.safeParse(Number(ctx.params.id));
   if (!result.success) {
     ctx.response.body = { error: "Invalid insight ID" };
     ctx.response.status = 400;
